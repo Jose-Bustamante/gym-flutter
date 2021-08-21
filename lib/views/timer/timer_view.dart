@@ -6,13 +6,14 @@ class TimerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      restorationId: 'timer_view',
       appBar: AppBar(
         title: const Text('Timer View'),
       ),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.pushNamed(context, '/list');
+            Navigator.of(context).pushReplacementNamed('/');
           },
           child: const Text('Timer Click'),
         ),

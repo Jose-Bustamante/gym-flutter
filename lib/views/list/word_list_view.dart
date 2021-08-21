@@ -17,6 +17,7 @@ class _WordListState extends State<WordList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      restorationId: 'word_list_view',
       appBar: AppBar(
         title: const Text('List View'),
         actions: [
@@ -29,6 +30,11 @@ class _WordListState extends State<WordList> {
                     builder: (context) => SavedList(saved: _saved),
                   ),
                 );
+              }),
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/');
               }),
         ],
       ),
