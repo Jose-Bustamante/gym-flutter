@@ -1,10 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
 class SavedList extends StatelessWidget {
-  const SavedList({Key? key, required this.saved}) : super(key: key);
+  const SavedList({Key? key, required this.saved, required this.removeAll})
+      : super(key: key);
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final List<WordPair> saved;
+  final VoidCallback removeAll;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,10 @@ class SavedList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Saved Suggestions'),
+        actions: [
+          IconButton(
+              onPressed: removeAll, icon: Icon(Icons.delete_forever_rounded))
+        ],
       ),
       body: ListView(children: divided),
     );

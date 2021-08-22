@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:provider/provider.dart';
 import 'saved_list_view.dart';
+import '../../config/models/list_model.dart';
 
 class WordList extends StatefulWidget {
   const WordList({Key? key}) : super(key: key);
@@ -27,7 +29,12 @@ class _WordListState extends State<WordList> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SavedList(saved: _saved),
+                    builder: (context) => Consumer<ListModel>(
+                      builder: (context, cart, child) {
+                        return SavedList(
+                            saved: cart.items, removeAll: cart.removeAll);
+                      },
+                    ),
                   ),
                 );
               }),
@@ -58,24 +65,28 @@ class _WordListState extends State<WordList> {
 
   Widget _buildRow(WordPair pair) {
     final alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair.asString,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border_outlined,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
-          }
-        });
-      },
-    );
+    return Consumer<ListModel>(builder: (context, cart, child) {
+      return ListTile(
+        title: Text(
+          pair.asString,
+          style: _biggerFont,
+        ),
+        trailing: Icon(
+          alreadySaved ? Icons.favorite : Icons.favorite_border_outlined,
+          color: alreadySaved ? Colors.red : null,
+        ),
+        onTap: () {
+          setState(() {
+            if (alreadySaved) {
+              _saved.remove(pair);
+              cart.removeItem(pair);
+            } else {
+              _saved.add(pair);
+              cart.add(pair);
+            }
+          });
+        },
+      );
+    });
   }
 }

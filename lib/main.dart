@@ -1,9 +1,11 @@
+// Packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+// Views
 import 'views/timer/timer_view.dart';
 import 'views/list/word_list_view.dart';
 import 'views/home/home_view.dart';
+// Models
 import 'config/models/list_model.dart';
 
 void main() => runApp(MultiProvider(
