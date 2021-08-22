@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../timer/timer_view.dart';
+import '../list/word_list_view.dart';
+import '../../widgets/placeholder.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -9,59 +12,42 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _navigationList = <Widget>[
-    Text(
-      'Home',
-      style: optionStyle,
-    ),
-    Text(
-      'List',
-      style: optionStyle,
-    ),
-    Text(
-      'Watch',
-      style: optionStyle,
-    ),
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  static const List<Widget> contents = [
+    WordList(),
+    PlaceholderWidget(color: Colors.deepOrangeAccent),
+    TimerView(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       restorationId: 'home_view',
-      appBar: AppBar(
-        title: const Text('Main Screen'),
-      ),
-      body: Center(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/list');
-            },
-            child: const Text('To List'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/timer');
-            },
-            child: const Text('To Timer'),
-          ),
-        ],
-      )),
+      body: contents[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_rounded),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.fitness_center_rounded),
+            label: 'Go!',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_rounded),
+            label: 'Lista',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }
