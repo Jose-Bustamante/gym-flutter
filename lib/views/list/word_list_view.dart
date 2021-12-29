@@ -64,8 +64,8 @@ class _WordListState extends State<WordList> {
   }
 
   Widget _buildRow(WordPair pair) {
-    final alreadySaved = _saved.contains(pair);
-    return Consumer<ListModel>(builder: (context, cart, child) {
+    return Consumer<ListModel>(builder: (context, list, child) {
+      final alreadySaved = list.items.contains(pair);
       return ListTile(
         title: Text(
           pair.asString,
@@ -79,10 +79,10 @@ class _WordListState extends State<WordList> {
           setState(() {
             if (alreadySaved) {
               _saved.remove(pair);
-              cart.removeItem(pair);
+              list.removeItem(pair);
             } else {
               _saved.add(pair);
-              cart.add(pair);
+              list.add(pair);
             }
           });
         },
