@@ -12,8 +12,6 @@ class WordList extends StatefulWidget {
 }
 
 class _WordListState extends State<WordList> {
-  final _suggestions = <WordPair>[];
-  final _saved = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
@@ -32,7 +30,7 @@ class _WordListState extends State<WordList> {
                     builder: (context) => Consumer<ListModel>(
                       builder: (context, cart, child) {
                         return SavedList(
-                            saved: cart.items, removeAll: cart.removeAll);
+                            saved: cart.savedItems, removeAll: cart.removeAll);
                       },
                     ),
                   ),
@@ -50,22 +48,25 @@ class _WordListState extends State<WordList> {
   }
 
   Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          if (i.isOdd) return const Divider();
+    return Consumer<ListModel>(builder: (context, list, child) {
+      list.initList();
+      return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: list.listSize * 2,
+          itemBuilder: (context, i) {
+            if (i.isOdd) return const Divider();
 
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-        });
+            final index = i ~/ 2;
+
+            return _buildRow(list.items[index]);
+          });
+    });
   }
 
   Widget _buildRow(WordPair pair) {
     return Consumer<ListModel>(builder: (context, list, child) {
-      final alreadySaved = list.items.contains(pair);
+      final alreadySaved = list.savedItems.contains(pair);
+
       return ListTile(
         title: Text(
           pair.asString,
@@ -78,10 +79,8 @@ class _WordListState extends State<WordList> {
         onTap: () {
           setState(() {
             if (alreadySaved) {
-              _saved.remove(pair);
               list.removeItem(pair);
             } else {
-              _saved.add(pair);
               list.add(pair);
             }
           });

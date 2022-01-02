@@ -4,23 +4,31 @@ import 'package:english_words/english_words.dart';
 
 class ListModel extends ChangeNotifier {
   final List<WordPair> _items = [];
+  final List<WordPair> _savedItems = [];
 
   UnmodifiableListView<WordPair> get items => UnmodifiableListView(_items);
+  UnmodifiableListView<WordPair> get savedItems =>
+      UnmodifiableListView(_savedItems);
 
   int get listSize => _items.length;
+  int get savedListSize => _savedItems.length;
+
+  void initList() {
+    _items.addAll(generateWordPairs().take(10));
+  }
 
   void add(WordPair item) {
-    _items.add(item);
+    _savedItems.add(item);
     notifyListeners();
   }
 
   void removeAll() {
-    _items.clear();
+    _savedItems.clear();
     notifyListeners();
   }
 
   void removeItem(WordPair item) {
-    _items.remove(item);
+    _savedItems.remove(item);
     notifyListeners();
   }
 }
